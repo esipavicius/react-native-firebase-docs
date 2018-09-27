@@ -27,4 +27,23 @@ firebase.notifications().scheduleNotification(notification, {
 })
 ```
 
+### Schedule receive notification
+
+```js
+async componentDidMount() {
+    this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
+        // Process your notification as required
+        //notification.android.setChannelId('test-channel')
+        //    .android.setSmallIcon('ic_launcher');
+
+        firebase.notifications()
+            .displayNotification(notification);
+    });
+}
+
+componentWillUnmount() {
+    this.notificationListener();
+}
+```
+
 For full reference documentation, please see [ref notifications.Notifications#scheduleNotification].
