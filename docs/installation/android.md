@@ -107,3 +107,31 @@ When using react-native-firebase with Proguard enabled (`minifyEnabled true in a
 ## 4. Install modules
 
 The `RNFirebasePackage` only provides your application with access to [Core](version /core/reference/core) features. Check out the installation guides on the other modules for how to use other Firebase features.
+
+## 5. Add missing dimension strategy
+
+Open `android/app/build.gradle` and it should look like:
+```
+defaultConfig {
+    ...
+    missingDimensionStrategy "RNN.reactNativeVersion", "reactNative57"
+}
+```
+
+Also `android/build.gradle` and it should look like:
+```
+subprojects { subproject ->
+    afterEvaluate {
+        if ((subproject.plugins.hasPlugin('android') || subproject.plugins.hasPlugin('android-library'))) {
+            android {
+                variantFilter { variant ->
+                    def names = variant.flavors*.name
+                    if (names.contains("reactNative51") || names.contains("reactNative55") || names.contains("reactNative56")) {
+                        setIgnore(true)
+                    }
+                }
+            }
+        }
+    }
+}
+```
